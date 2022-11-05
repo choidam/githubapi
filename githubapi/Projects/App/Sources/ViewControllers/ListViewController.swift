@@ -21,6 +21,10 @@ final class ListViewController: UIViewController, ReactorKit.View {
         $0.allowsSelection = false
     }
     
+    private var orgTextField = UITextField()
+    
+    private var repoTextField = UITextField()
+    
     // MARK: Property
     
     var dataSource = RxTableViewSectionedReloadDataSource<GitIssueSection> { dataSource, tableView, indexPath, sectionItem in
@@ -99,6 +103,23 @@ extension ListViewController {
     }
     
     @objc func tapSearch(){
-        print("tap search")
+        let alert = UIAlertController(title: "원하는 검색어를 입력해 주세요", message: "", preferredStyle: UIAlertController.Style.alert)
+        
+        alert.addTextField { (textField) in
+            self.orgTextField = textField
+        }
+        
+        alert.addTextField { (textField) in
+            self.repoTextField = textField
+        }
+        
+        alert.addAction(UIAlertAction(title: "Search", style: UIAlertAction.Style.default, handler: { [weak self] _ in
+            let organization = self?.orgTextField.text
+            let repository = self?.repoTextField.text
+            
+            self?.reactor?.action.onNext(.search(organization, repository))
+        }))
+        
+        self.present(alert, animated: true, completion: nil)
     }
 }

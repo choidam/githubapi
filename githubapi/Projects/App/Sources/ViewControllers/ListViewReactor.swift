@@ -10,14 +10,17 @@ import RxRelay
 
 final class ListViewReactor: Reactor {
     enum Action {
+        case search(String?, String?)
         case getIssueList
     }
     
     enum Mutation {
+        case search(String?, String?)
         case getIssueList(Single<[IssueItem]>)
         
         var bindMutation: BindMutation {
             switch self {
+            case .search: return .search
             case .getIssueList: return .getIssueList
             }
         }
@@ -25,8 +28,8 @@ final class ListViewReactor: Reactor {
     
     enum BindMutation {
         case initialState
+        case search
         case getIssueList
-        case setList
     }
     
     struct State {
@@ -51,6 +54,8 @@ final class ListViewReactor: Reactor {
     
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
+        case .search(let org, let repo):
+            return .just(.search(org, repo))
         case .getIssueList:
             let org = currentState.organization
             let repo = currentState.repository
@@ -63,6 +68,11 @@ final class ListViewReactor: Reactor {
         state.state = mutation.bindMutation
         
         switch mutation {
+        case .search(let org, let repo):
+            state.organization = org ?? ""
+            state.repository = repo ?? ""
+            
+            action.onNext(.getIssueList)
         case .getIssueList(let response):
             response.subscribe(onSuccess: { issues in
                 print("🎉🎉🎉🎉🎉 issues: \(issues)")
