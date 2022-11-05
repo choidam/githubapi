@@ -13,7 +13,15 @@ final class ListViewReactor: Reactor {
     typealias Action = NoAction
     
     struct State {
-        
+        // test
+        var sections: [GitIssueSection] = [.section([.item(GitIssueCellReactor()),
+                                                     .item(GitIssueCellReactor()),
+                                                     .item(GitIssueCellReactor()),
+                                                     .item(GitIssueCellReactor()),
+                                                     .item(GitIssueCellReactor()),
+                                                     .item(GitIssueCellReactor()),
+                                                     .item(GitIssueCellReactor()),
+                                                    ])]
     }
     
     var initialState: State
