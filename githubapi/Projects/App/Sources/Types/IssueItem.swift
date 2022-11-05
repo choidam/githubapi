@@ -9,4 +9,5 @@
 struct IssueItem: Decodable {
     let number: Int?
     let title: String?
+    let body: String?
 }

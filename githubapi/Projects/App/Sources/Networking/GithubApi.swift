@@ -56,15 +56,18 @@ extension GithubAPI: TargetType {
                         {
                             "number": 123,
                             "title": "title1111",
+                            "body": "**Describe"
                         },
                         {
                             "number": 456,
-                            "title": "title2222222"
+                            "title": "title2222222",
+                            "body": "**Describe"
                         },
                         {
                             "number": 456,
-                            "title": "title2222222"
-                        }
+                            "title": "title2222222",
+                            "body": "**Describe"
+                        },
                     ]
                 """.utf8
             )

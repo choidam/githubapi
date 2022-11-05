@@ -15,12 +15,14 @@ final class GitIssueCellReactor: Reactor {
     struct State {
         let number: Int?
         let title: String?
+        let body: String?
     }
     
     var initialState: State
     
     init(issue: IssueItem) {
         self.initialState = State(number: issue.number,
-                                  title: issue.title)
+                                  title: issue.title,
+                                  body: issue.body)
     }
 }

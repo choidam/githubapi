@@ -102,11 +102,11 @@ extension ListViewController {
             .map { item  -> (Int?, String?) in
                 switch item {
                 case .item(let reactor):
-                    return (reactor.currentState.number, reactor.currentState.title)
+                    return (reactor.currentState.number, reactor.currentState.body)
                 }
             }
-            .subscribe(onNext: { [weak self] (num, title) in
-                let detailViewReactor = DetailViewReactor(number: num ?? 0, body: title ?? "")
+            .subscribe(onNext: { [weak self] (num, body) in
+                let detailViewReactor = DetailViewReactor(number: num ?? 0, body: body ?? "")
                 let detailViewController = DetailViewController()
                 detailViewController.reactor = detailViewReactor
                 
