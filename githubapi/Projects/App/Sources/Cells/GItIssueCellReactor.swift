@@ -13,12 +13,14 @@ final class GitIssueCellReactor: Reactor {
     typealias Action = NoAction
     
     struct State {
-        
+        let number: Int?
+        let title: String?
     }
     
     var initialState: State
     
-    init() {
-        self.initialState = State()
+    init(issue: IssueItem) {
+        self.initialState = State(number: issue.number,
+                                  title: issue.title)
     }
 }

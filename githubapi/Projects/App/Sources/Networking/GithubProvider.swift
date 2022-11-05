@@ -15,8 +15,8 @@ class GithubProvider: ProviderProtocol {
         provider = Self.consProvider(isStub, sampleStatusCode, customEndpointClosure)
     }
 
-    func fetchIssueList() -> Single<[IssueItem]> {
+    func fetchIssueList(organization: String, repository: String) -> Single<[IssueItem]> {
         return request(type: [IssueItem].self,
-                       target: .getIssues)
+                       target: .getIssues(organization: organization, repository: repository))
     }
 }

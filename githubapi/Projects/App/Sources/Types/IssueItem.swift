@@ -6,8 +6,6 @@
 //  Copyright © 2022 team.io. All rights reserved.
 //
 
-import Foundation
-
 struct IssueItem: Decodable {
     let number: Int?
     let title: String?

@@ -13,13 +13,11 @@ final class GitIssueCell: UITableViewCell, ReactorKit.View, Reusable {
     // MARK: UI
     
     private let numberLabel = UILabel().then {
-        $0.text = "5555"
         $0.textColor = .black
         $0.textAlignment = .left
     }
     
     private let titleLabel = UILabel().then {
-        $0.text = "titletitlelkttktktkkkkdksdlkfjlasjflkssldkjfl"
         $0.textColor = .black
         $0.textAlignment = .left
     }
@@ -71,7 +69,16 @@ extension GitIssueCell {
 
 extension GitIssueCell {
     private func bindState(reactor: GitIssueCellReactor){
+        reactor.state
+            .compactMap { $0.number }
+            .map { "\($0)" }
+            .bind(to: numberLabel.rx.text)
+            .disposed(by: disposeBag)
         
+        reactor.state
+            .compactMap { $0.title }
+            .bind(to: titleLabel.rx.text)
+            .disposed(by: disposeBag)
     }
     
     private func bindAction(reactor: GitIssueCellReactor){

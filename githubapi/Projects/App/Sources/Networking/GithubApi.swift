@@ -11,7 +11,7 @@ enum GithubAPI {
     static var token = "Bearer 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" // test
     
     // 이슈 리스트 조회
-    case getIssues
+    case getIssues(organization: String, repository: String)
 }
 
 extension GithubAPI: TargetType {
@@ -21,8 +21,8 @@ extension GithubAPI: TargetType {
     
     var path: String {
         switch self {
-        case .getIssues:
-            return "repos/apple/swift/issues"
+        case .getIssues(let org, let repo):
+            return "repos/apple/\(org)/\(repo)"
         }
     }
     
@@ -56,6 +56,10 @@ extension GithubAPI: TargetType {
                         {
                             "number": 123,
                             "title": "title1111",
+                        },
+                        {
+                            "number": 456,
+                            "title": "title2222222"
                         },
                         {
                             "number": 456,

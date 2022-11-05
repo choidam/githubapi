@@ -58,9 +58,7 @@ extension ListViewController {
     
     private func setNavigationBar(){
         view.backgroundColor = .white
-        
         navigationController?.navigationBar.prefersLargeTitles = true
-        title = "test test"
         
         let searchButton = UIBarButtonItem(title: "Search", style: .plain, target: self, action: #selector(tapSearch))
         self.navigationItem.rightBarButtonItem = searchButton
@@ -82,6 +80,14 @@ extension ListViewController {
 
 extension ListViewController {
     private func bindState(reactor: ListViewReactor){
+        reactor.state
+            .map { ($0.organization, $0.repository) }
+            .map { "\($0.0) \($0.1)" }
+            .subscribe(onNext: { [weak self] title in
+                self?.title = title
+            })
+            .disposed(by: disposeBag)
+        
         reactor.state
             .map { $0.sections }
             .bind(to: tableView.rx.items(dataSource: dataSource))

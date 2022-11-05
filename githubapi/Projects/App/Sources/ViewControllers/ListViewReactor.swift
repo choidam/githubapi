@@ -32,6 +32,9 @@ final class ListViewReactor: Reactor {
     struct State {
         var state: BindMutation = .initialState
         
+        var organization: String = "apple"
+        var repository: String = "Swift"
+        
         var sections: [GitIssueSection] = []
     }
     
@@ -49,7 +52,9 @@ final class ListViewReactor: Reactor {
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
         case .getIssueList:
-            return .just(.getIssueList(gitProvider.fetchIssueList()))
+            let org = currentState.organization
+            let repo = currentState.repository
+            return .just(.getIssueList(gitProvider.fetchIssueList(organization: org, repository: repo)))
         }
     }
     
@@ -61,7 +66,7 @@ final class ListViewReactor: Reactor {
         case .getIssueList(let response):
             response.subscribe(onSuccess: { issues in
                 print("🎉🎉🎉🎉🎉 issues: \(issues)")
-                state.sections = self.sections(list: ["", "", ""])
+                state.sections = self.sections(list: issues)
             }).disposed(by: disposeBag)
         }
         
@@ -70,11 +75,11 @@ final class ListViewReactor: Reactor {
 }
 
 extension ListViewReactor {
-    private func sections(list: [String]?) -> [GitIssueSection] {
+    private func sections(list: [IssueItem]?) -> [GitIssueSection] {
         guard let list = list else { return [] }
 
-        let items: [GitIssueSectionItem] = list.map { _ in
-            let cellReactor = GitIssueCellReactor()
+        let items: [GitIssueSectionItem] = list.map { issue in
+            let cellReactor = GitIssueCellReactor(issue: issue)
             return .item(cellReactor)
         }
 
