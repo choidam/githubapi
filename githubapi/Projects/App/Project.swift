@@ -25,4 +25,6 @@ let project = Project.app(name: projectName,
                             .external(name: "RxCocoa"),
                             .external(name: "Moya"),
                             .external(name: "RxMoya"),
+                            .external(name: "Reusable"),
+                            .external(name: "RxDataSources"),
                           ])
