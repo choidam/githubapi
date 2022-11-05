@@ -10,11 +10,14 @@ final class DetailViewReactor: Reactor {
     typealias Action = NoAction
     
     struct State {
+        var number: Int
+        var body: String
     }
     
     var initialState: State
     
-    init() {
-        self.initialState = State()
+    init(number: Int, body: String) {
+        self.initialState = State(number: number,
+                                  body: body)
     }
 }

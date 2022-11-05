@@ -18,7 +18,6 @@ final class ListViewController: UIViewController, ReactorKit.View {
     private let tableView = UITableView().then {
         $0.register(cellType: GitIssueCell.self)
         $0.separatorStyle = .singleLine
-        $0.allowsSelection = false
     }
     
     private var orgTextField = UITextField()
@@ -99,7 +98,21 @@ extension ListViewController {
     }
     
     private func bindAction(reactor: ListViewReactor){
-        
+        tableView.rx.modelSelected(GitIssueSectionItem.self)
+            .map { item  -> (Int?, String?) in
+                switch item {
+                case .item(let reactor):
+                    return (reactor.currentState.number, reactor.currentState.title)
+                }
+            }
+            .subscribe(onNext: { [weak self] (num, title) in
+                let detailViewReactor = DetailViewReactor(number: num ?? 0, body: title ?? "")
+                let detailViewController = DetailViewController()
+                detailViewController.reactor = detailViewReactor
+                
+                self?.navigationController?.pushViewController(detailViewController, animated: true)
+            })
+            .disposed(by: disposeBag)
     }
     
     @objc func tapSearch(){
