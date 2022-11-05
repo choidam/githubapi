@@ -48,7 +48,8 @@ final class ListViewController: UIViewController, ReactorKit.View {
 
 extension ListViewController {
     static func create() -> ListViewController? {
-        let listViewReactor = ListViewReactor()
+        let gitProvier = GithubProvider(isStub: true)
+        let listViewReactor = ListViewReactor(gitProvider: gitProvier)
         let listViewController = ListViewController()
         listViewController.reactor = listViewReactor
         
@@ -92,6 +93,6 @@ extension ListViewController {
     }
     
     @objc func tapSearch(){
-        print("tap search!!!!!")
+        print("tap search")
     }
 }

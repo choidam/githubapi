@@ -9,23 +9,23 @@
 import RxRelay
 
 final class ListViewReactor: Reactor {
-    
     enum Action {
-        case setList
+        case getIssueList
     }
     
     enum Mutation {
-        case setList
+        case getIssueList(Single<[IssueItem]>)
         
         var bindMutation: BindMutation {
             switch self {
-            case .setList: return .setList
+            case .getIssueList: return .getIssueList
             }
         }
     }
     
     enum BindMutation {
         case initialState
+        case getIssueList
         case setList
     }
     
@@ -36,17 +36,20 @@ final class ListViewReactor: Reactor {
     }
     
     var initialState: State
+    var gitProvider: GithubProvider
+    var disposeBag = DisposeBag()
     
-    init() {
+    init(gitProvider: GithubProvider) {
         self.initialState = State()
+        self.gitProvider = gitProvider
         
-        action.onNext(.setList)
+        action.onNext(.getIssueList)
     }
     
     func mutate(action: Action) -> Observable<Mutation> {
         switch action {
-        case .setList:
-            return .just(.setList)
+        case .getIssueList:
+            return .just(.getIssueList(gitProvider.fetchIssueList()))
         }
     }
     
@@ -55,8 +58,11 @@ final class ListViewReactor: Reactor {
         state.state = mutation.bindMutation
         
         switch mutation {
-        case .setList:
-            state.sections = self.sections(list: ["", "", "", "", ""])
+        case .getIssueList(let response):
+            response.subscribe(onSuccess: { issues in
+                print("🎉🎉🎉🎉🎉 issues: \(issues)")
+                state.sections = self.sections(list: ["", "", ""])
+            }).disposed(by: disposeBag)
         }
         
         return state
